@@ -168,19 +168,46 @@ std::shared_ptr<Mesh> Mesh::load(
 				color = glm::vec4(colorVector.at(0), colorVector.at(1),
 					colorVector.at(2), colorVector.at(3));
 			}
+			else {
+				color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+			}
 
 			// shininess
+			uint8_t shininess;
 			std::string shininessString = materialNode.child("shininess").text().as_string();
-			uint8_t shininess = stoi(shininessString);
+			if (shininessString != "")
+			{
+				shininess = stoi(shininessString);
+			}
+			else
+			{
+				shininess = 0;
+			}
 
 
 			// Read Indices from node
+			std::vector<uint16_t> indicesVector;
 			std::string indices = bufferNode.child("indices").text().as_string();
-			std::vector<uint16_t> indicesVector = splitStr<uint16_t>(indices, ',');
+			if (indices != "")
+			{
+				indicesVector = splitStr<uint16_t>(indices, ',');
+			}
+			else
+			{
+				return nullptr;
+			}
 
 			// Read Coordinates from node
+			std::vector<float> coordsVector;
 			std::string coords = bufferNode.child("coords").text().as_string();
-			std::vector<float> coordsVector = splitStr<float>(coords, ',');
+			if (coords != "")
+			{
+				coordsVector = splitStr<float>(coords, ',');
+			}
+			else
+			{
+				return nullptr;
+			}
 
 			// Read Texture Coordinates from node
 			std::vector<float> texCoordsVector;

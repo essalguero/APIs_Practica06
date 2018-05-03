@@ -65,10 +65,15 @@ int createModelsInWorld(World & world)
 {
 	// Load the model from file
 	std::shared_ptr<Mesh> modelMesh = Mesh::load("data/column.msh.xml");
+
+	if (modelMesh == nullptr)
+		return 0;
+
 	shared_ptr<Model> modelModel = make_shared<Model>(modelMesh);
 	//modelModel->setRotation(glm::vec3(90.0f, 0.0f, 0.0f));
-	//modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	//worldModel->setScale(vec3(10.0f, 10.0f, 10.0f));
+	modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	modelModel->setScale(vec3(0.01f, 0.01f, 0.01f));
+
 
 	world.addEntity(modelModel);
 
@@ -82,8 +87,8 @@ int createModelsInWorld(World & world)
 
 	pointLight->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	world.addEntity(directionalLight);
-	world.addEntity(pointLight);
+	//world.addEntity(directionalLight);
+	//world.addEntity(pointLight);
 
 	return 1;
 }
@@ -126,8 +131,8 @@ int main(int, char**) {
 
 	// Generate a camera and store it in the world
 	shared_ptr<Camera> camera = make_shared<Camera>();
-	camera->setRotation(glm::vec3(-25.0f, 0.0f, 0.0f));
-	camera->setPosition(glm::vec3(0.0f, 0.25f, 0.3f));
+	camera->setRotation(glm::vec3(-30.0f, 0.0f, 0.0f));
+	camera->setPosition(glm::vec3(0.0f, 15.0f, 20.0f));
 	camera->setClearColor(glm::vec3(0.0f, 0.0f, 0.0f));
 	world.addEntity(camera);
 
@@ -138,14 +143,6 @@ int main(int, char**) {
 		return -1;
 	}
 
-	std::shared_ptr<Light> pointLight = std::dynamic_pointer_cast<Light>(world.getEntity(world.getNumEntities() - 1));
-
-	if (!pointLight)
-	{
-
-		std::cout << "could not get the light" << std::endl;
-		return -1;
-	}
 	double xPrev;
 	double yPrev;
 
@@ -214,8 +211,6 @@ int main(int, char**) {
 			static_cast<float>(screenWidth) / static_cast<float>(screenHeight), 0.1f, 100.0f);
 		camera->setProjection(projectionMatrix);
 
-		// Update the light position
-		pointLight->setRotationQuat(glm::rotate(pointLight->getRotationQuat(), glm::radians(60.0f * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f)));
 		
 		// Draw the objects
 		world.update(deltaTime);
