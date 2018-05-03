@@ -143,3 +143,44 @@ void Material::setShininess(uint8_t shininess)
 	materialShininess = shininess;
 }
 
+
+
+Material::BlendMode	Material::getBlendMode() const
+{
+
+}
+
+void Material::setBlendMode(Material::BlendMode blendMode)
+{
+	blendingMode = blendMode;
+}
+
+bool Material::getLighting() const
+{
+	return lighting;
+}
+
+void Material::setLighting(bool enable)
+{
+	lighting = enable;
+}
+
+bool Material::getCulling() const
+{
+	return culling;
+}
+
+void Material::setCulling(bool enable)
+{
+	culling = enable;
+}
+
+bool Material::getDepthWrite() const
+{
+	return depthWrite;
+}
+
+void Material::setDepthWrite(bool enable)
+{
+	depthWrite = enable;
+}

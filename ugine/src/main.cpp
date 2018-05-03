@@ -55,6 +55,7 @@ int init() {
 	// enable gl states
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_SCISSOR_TEST);
+	glEnable(GL_BLEND);
 	return 0;
 
 }
@@ -205,6 +206,8 @@ int main(int, char**) {
 
 		// Update viewport in case the screen has been resized
 		camera->setViewport(glm::ivec4(0, 0, screenWidth, screenHeight));
+
+		//Camera should be rotated here
 
 		// Set projection matrix in case the screen has been resized
 		glm::mat4 projectionMatrix = glm::perspective(45.0f, 
