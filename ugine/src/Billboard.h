@@ -17,7 +17,7 @@ public:
 	void setSpin(float spin);
 	virtual void draw() override;
 
-private:
+protected:
 	Material material;
 	glm::vec2 size;
 	float spin;
