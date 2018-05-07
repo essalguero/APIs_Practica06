@@ -147,7 +147,7 @@ void Material::setShininess(uint8_t shininess)
 
 Material::BlendMode	Material::getBlendMode() const
 {
-
+	return blendingMode;
 }
 
 void Material::setBlendMode(Material::BlendMode blendMode)
