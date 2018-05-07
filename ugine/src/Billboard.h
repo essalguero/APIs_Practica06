@@ -8,6 +8,7 @@
 class Billboard : public Entity
 {
 public:
+	Billboard() { material = nullptr; };
 	Billboard(const Material& mat);
 	const Material& getMaterial() const;
 	Material& getMaterial();

@@ -25,12 +25,14 @@ private:
 	bool emitting;
 	float minEmittingInterval;
 	float maxEmittingInterval;
-	float minVelocityInterval;
+	glm::vec3 minVelocityInterval;
+	glm::vec3 maxVelocityInterval;
 	float maxSpinInterval;
 	float minSpinInterval;
-	float maxVelocityInterval;
 	float minScaleInterval;
 	float maxScaleInterval;
+	float minLifetimeInterval;
+	float maxLifetimeInterval;
 	glm::vec4 minColorInterval;
 	glm::vec4 maxColorInterval;
 
