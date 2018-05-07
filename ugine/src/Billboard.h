@@ -3,7 +3,7 @@
 #include "common.h"
 #include "Material.h"
 #include "Entity.h"
-#include "Buffe0r.h"
+#include "Buffer.h"
 
 class Billboard : public Entity
 {
