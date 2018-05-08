@@ -4,6 +4,9 @@
 
 void Camera::prepare()
 {
+	// Activate depth buffer writting
+	glDepthMask(true);
+
 	State::projectionMatrix = this->projectionMatrix;
 	
 	glm::mat4 viewMatrix;

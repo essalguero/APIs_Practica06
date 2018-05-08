@@ -9,8 +9,7 @@ class Material
 public:
 	enum BlendMode { ALPHA = 0, ADD , MUL };
 
-	Material(const std::shared_ptr<Texture>& tex = nullptr,
-		const std::shared_ptr<Shader>& shader = nullptr);
+	Material(const std::shared_ptr<Texture>& tex = nullptr, const std::shared_ptr<Shader>& shader = nullptr);
 	const std::shared_ptr<Shader>& getShader() const;
 	std::shared_ptr<Shader>& getShader();
 	void setShader(const std::shared_ptr<Shader>& shader);

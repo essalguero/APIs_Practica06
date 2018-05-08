@@ -121,6 +121,23 @@ uniform LightInfo lights[MAX_LIGHTS];
 	{
 		State::lights.at(i)->prepare(i, shader);
 	}
+
+	switch (blendingMode) {
+	case Material::BlendMode::ALPHA:
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+	case Material::BlendMode::ADD:
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		break;
+	case Material::BlendMode::MUL:
+		glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+		break;
+	default:
+		break;
+	}
+
+	(culling) ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
+	glDepthMask(depthWrite);
 }
 
 const glm::vec4& Material::getColor() const
