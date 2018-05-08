@@ -1,6 +1,6 @@
 #include "Emitter.h"
 
-Emitter::Emitter(const Material& mat, bool autofade = true)
+Emitter::Emitter(const Material& mat, bool autofade)
 {
 	material = mat;
 	autoFade = autofade;
@@ -44,7 +44,18 @@ void Emitter::setColorRange(const glm::vec4& min, const glm::vec4& max)
 
 void Emitter::emit(bool enable)
 {
+	float randomValue = glm::linearRand(minEmittingInterval, maxEmittingInterval);
+	randomValue += pendingToEmit;
 
+	int particlesToCreate = static_cast<int>(randomValue) / 1;
+
+	pendingToEmit = randomValue - particlesToCreate;
+
+
+	for (int i = 0; i < particlesToCreate; ++i)
+	{
+		//Emit particle
+	}
 }
 
 bool Emitter::isEmitting()
@@ -54,7 +65,16 @@ bool Emitter::isEmitting()
 
 void Emitter::update(float deltaTime)
 {
+	for (auto it = particlesEmitted.rbegin(); it != particlesEmitted.rend(); ++it)
+	{
+		(*it).update(deltaTime);
 
+		if ((*it).getRemainingLifetime() <= 0)
+		{
+			std::advance(it, 1);
+			particlesEmitted.erase(it.base());
+		}
+	}
 }
 
 void Emitter::draw()

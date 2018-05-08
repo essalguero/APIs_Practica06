@@ -20,5 +20,5 @@ float Particle::getRemainingLifetime() const
 
 void Particle::update(float deltaTime)
 {
-
+	remainingLifetime -= deltaTime;
 }

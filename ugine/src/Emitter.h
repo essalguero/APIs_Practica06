@@ -3,6 +3,9 @@
 #include "common.h"
 #include "Entity.h"
 #include "Material.h"
+#include "Particle.h"
+
+#include <vector>
 
 class Emitter : public Entity
 {
@@ -36,5 +39,7 @@ private:
 	glm::vec4 minColorInterval;
 	glm::vec4 maxColorInterval;
 
+	std::vector<Particle> particlesEmitted;
 
+	float pendingToEmit;
 };
