@@ -132,8 +132,13 @@ int main(int, char**) {
 
 	// Generate a camera and store it in the world
 	shared_ptr<Camera> camera = make_shared<Camera>();
-	camera->setRotation(glm::vec3(-30.0f, 0.0f, 0.0f));
-	camera->setPosition(glm::vec3(0.0f, 15.0f, 20.0f));
+	//camera->setRotation(glm::vec3(-30.0f, 0.0f, 0.0f));
+	//camera->setPosition(glm::vec3(0.0f, 0.0f, 20.0f));
+	camera->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	//camera->setRotation(glm::vec3(0.0f, 0.0f, 10.0f));
+
+	camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(-20, 0, 0))));
+	camera->move(glm::vec3(0.0f, 5.0f, 25.0f));
 	camera->setClearColor(glm::vec3(0.0f, 0.0f, 0.0f));
 	world.addEntity(camera);
 
@@ -165,7 +170,7 @@ int main(int, char**) {
 
 
 		// Check key status
-		if (glfwGetKey(window, GLFW_KEY_W) || glfwGetKey(window, GLFW_KEY_UP))
+		/*if (glfwGetKey(window, GLFW_KEY_W) || glfwGetKey(window, GLFW_KEY_UP))
 		{
 			camera->move(vec3(0.0f, 0.0f, -MOVING_SPEED) * deltaTime);
 		}
@@ -192,7 +197,7 @@ int main(int, char**) {
 		glm::vec3 currentRot = camera->getRotation();
 		camera->setRotation((currentRot + newRotation));
 		yPrev = yCurrent;
-		xPrev = xCurrent;
+		xPrev = xCurrent;*/
 		
 
 		// get updated screen size
@@ -208,7 +213,22 @@ int main(int, char**) {
 		camera->setViewport(glm::ivec4(0, 0, screenWidth, screenHeight));
 
 		//Camera should be rotated here
+		camera->setPosition(glm::vec3(0, 0, 0));
+		//camera->setRotation(camera->getRotation() - glm::vec3(0.0f, 0.0f, -90.0f));
+		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(20, 0, 0))));
+		//camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30 * deltaTime, 0))));
 
+		camera->setRotationQuat(glm::slerp(camera->getRotationQuat(),
+			camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30, 0))),
+			deltaTime));
+
+		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(-20, 0, 0))));
+		//camera->setRotationQuat(glm::slerp(camera->getRotationQuat(), 
+		//	camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 60, 0))), deltaTime));
+		//camera->setRotation(camera->getRotation() + glm::vec3(0.0f, 0.0f, -90.0f));
+		camera->move(glm::vec3(0, 5, 25));
+		//camera->setRotation(glm::vec3(-30.0f, 0.0f, 0.0f));
+		
 		// Set projection matrix in case the screen has been resized
 		glm::mat4 projectionMatrix = glm::perspective(45.0f, 
 			static_cast<float>(screenWidth) / static_cast<float>(screenHeight), 0.1f, 100.0f);
