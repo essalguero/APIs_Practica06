@@ -86,12 +86,18 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	if (modelMesh == nullptr)
 		return 0;
 
+	/*for (size_t i = 0; i < modelMesh->getNumBuffers(); ++i)
+	{
+		modelMesh->getBuffer(i)->inverseNormals();
+	}*/
+
 	shared_ptr<Model> modelModel = make_shared<Model>(modelMesh);
 	//modelModel->setRotation(glm::vec3(90.0f, 0.0f, 0.0f));
 	modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	modelModel->setScale(vec3(0.01f, 0.01f, 0.01f));
 
-	//world.addEntity(modelModel);
+
+	world.addEntity(modelModel);
 
 	std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");
 	Material fireMaterial = Material(fireTexture, State::defaultShader);

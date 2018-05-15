@@ -22,6 +22,8 @@ public:
 	// Obtiene el mensaje de error generado al crear el buffer
 	inline const char*	getError() const { return error; };
 
+	void inverseNormals();
+
 protected:
 
 	static inline void destroy(Buffer* p) {

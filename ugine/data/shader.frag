@@ -82,7 +82,7 @@ void main()
 
 	if (numberLights > 0)
 	{
-		vec4 totalIlumination = vec4(0, 0, 0, 0);
+		vec4 totalIlumination = vec4(0, 0, 0, 1.0);
 
 		for (int i = 0; i < numberLights; ++i)
 		{

@@ -15,6 +15,13 @@ std::shared_ptr<Buffer> Buffer::create(const std::vector<Vertex>& vertices, cons
 	return p;
 }
 
+void Buffer::inverseNormals() {
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices.at(i).normal = vertices.at(i).normal * glm::vec3(-1.0f);
+	}
+}
+
 void Buffer::draw(const std::shared_ptr<Shader> & shader) const {
 	// Volver a enlazar los buffers de datos antes de usarlos
 	// Los datos ya se cargaron en los buffers en el Constructor

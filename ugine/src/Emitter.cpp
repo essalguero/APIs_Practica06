@@ -55,8 +55,6 @@ bool Emitter::isEmitting()
 void Emitter::update(float deltaTime)
 {
 	// Update existing particles
-	std::vector<Particle>::reverse_iterator it = (particlesEmitted.rbegin());
-	std::vector<Particle>::reverse_iterator send = (particlesEmitted.rend());
 	for (int i = particlesEmitted.size() - 1; i >= 0; --i)
 	{
 		particlesEmitted.at(i).update(deltaTime);
