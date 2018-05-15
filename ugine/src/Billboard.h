@@ -23,4 +23,6 @@ protected:
 	glm::vec2 size;
 	float spin;
 	std::shared_ptr<Buffer> buffer;
+
+	glm::vec3 velocity;
 };

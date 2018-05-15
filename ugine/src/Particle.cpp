@@ -5,12 +5,13 @@ Particle::Particle(
 	const glm::vec3& vel,
 	float spinVel,
 	float lifetime,
-	bool autofade)
+	bool autofade) : Billboard(mat)
 {
-	material = mat;
 	spin = spinVel;
 	remainingLifetime = lifetime;
+	totalLifetime = lifetime;
 	automaticFade = autofade;
+	velocity = vel;
 }
 
 float Particle::getRemainingLifetime() const
@@ -21,4 +22,14 @@ float Particle::getRemainingLifetime() const
 void Particle::update(float deltaTime)
 {
 	remainingLifetime -= deltaTime;
+
+	move(velocity);
+
+	rotation = rotation + glm::vec3(0, 0, (spin * deltaTime));
+
+	if (automaticFade)
+	{
+		material.setColor(glm::vec4(material.getColor().x, material.getColor().y, material.getColor().z, 
+			max(remainingLifetime / totalLifetime, 0.0f)));
+	}
 }

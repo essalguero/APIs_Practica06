@@ -24,6 +24,7 @@
 #include "Camera.h"
 #include "World.h"
 #include "Texture.h"
+#include "Emitter.h"
 
 #include "State.h"
 
@@ -60,9 +61,24 @@ int init() {
 
 }
 
+void configureEmitter(Emitter& emitter, glm::vec4 minColorRange, glm::vec4 maxColorRange,
+	float minLifetimeRange, float maxLifetimeRange, float minRateRange, float maxRateRange,
+	float minScaleRange, float maxScaleRange, glm::vec3 minVelocityRange, glm::vec3 maxVelocityRante,
+	float minSpinRange, float maxSpinRange, bool emitting)
+{
+	emitter.setColorRange(minColorRange, maxColorRange);
+	emitter.setLifetimeRange(minLifetimeRange, maxLifetimeRange);
+	emitter.setRateRange(minRateRange, maxRateRange);
+	emitter.setScaleRange(minScaleRange, maxScaleRange);
+	emitter.setScaleRange(minScaleRange, maxScaleRange);
+	emitter.setVelocityRange(minVelocityRange, maxVelocityRante);
+	emitter.setSpinVelocityRange(minSpinRange, maxSpinRange);
+	emitter.emit(emitting);
+}
+
 
 // This method creates all the models and add them to the world
-int createModelsInWorld(World & world)
+int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 {
 	// Load the model from file
 	std::shared_ptr<Mesh> modelMesh = Mesh::load("data/column.msh.xml");
@@ -75,8 +91,27 @@ int createModelsInWorld(World & world)
 	modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	modelModel->setScale(vec3(0.01f, 0.01f, 0.01f));
 
+	//world.addEntity(modelModel);
 
-	world.addEntity(modelModel);
+	std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");
+	Material fireMaterial = Material(fireTexture, State::defaultShader);
+	Emitter fireEmitter = Emitter(fireMaterial, true);
+	//fireEmitter.setPosition(glm::vec3(0, 2, 0));
+	fireEmitter.setPosition(glm::vec3(0, 0, 0));
+	configureEmitter(fireEmitter, glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
+		0.3, 0.6, 50.0f, 200.0f, 0.2, 0.5, glm::vec3(0.0f, 0.3f, 0.0f), glm::vec3(0.1f, 10.0f, 0.1f),
+		0.0f, 3.0f, true);
+	emittersVector.push_back(fireEmitter);
+
+	std::shared_ptr<Texture> smokeTexture = Texture::load("data/smoke.png");
+	Material smokeMaterial = Material(smokeTexture, State::defaultShader);
+	Emitter smokeEmitter = Emitter(smokeMaterial, true);
+	//smokeEmitter.setPosition(glm::vec3(0, 2, 0));
+	smokeEmitter.setPosition(glm::vec3(0, 0, 0));
+	configureEmitter(smokeEmitter, glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
+		0.3, 0.6, 50.0f, 200.0f, 0.2, 0.5, glm::vec3(0.0f, 0.3f, 0.0f), glm::vec3(0.1f, 10.0f, 0.1f),
+		0.0f, 3.0f, true);
+	emittersVector.push_back(smokeEmitter);
 
 	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
 
@@ -97,6 +132,7 @@ int createModelsInWorld(World & world)
 
 int main(int, char**) {
 
+	std::vector<Emitter> emittersVector;
 
 	if (glfwInit() != GLFW_TRUE) {
 		std::cout << "could not initalize glfw" << std::endl;
@@ -143,7 +179,7 @@ int main(int, char**) {
 	world.addEntity(camera);
 
 	// Generate the objects in the world
-	if (!createModelsInWorld(world))
+	if (!createModelsInWorld(world, emittersVector))
 	{
 		cout << "Error creating the Model objects in the world" << endl;
 		return -1;
@@ -229,6 +265,12 @@ int main(int, char**) {
 		camera->move(glm::vec3(0, 5, 25));
 		//camera->setRotation(glm::vec3(-30.0f, 0.0f, 0.0f));
 		
+		for (auto emitter = emittersVector.begin(); emitter != emittersVector.end(); ++emitter)
+		{
+			(*emitter).update(deltaTime);
+			(*emitter).draw();
+		}
+
 		// Set projection matrix in case the screen has been resized
 		glm::mat4 projectionMatrix = glm::perspective(45.0f, 
 			static_cast<float>(screenWidth) / static_cast<float>(screenHeight), 0.1f, 100.0f);

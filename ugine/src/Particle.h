@@ -18,5 +18,6 @@ public:
 
 private:
 	float remainingLifetime;
+	float totalLifetime;
 	bool automaticFade;
 };

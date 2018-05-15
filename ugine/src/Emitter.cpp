@@ -44,18 +44,7 @@ void Emitter::setColorRange(const glm::vec4& min, const glm::vec4& max)
 
 void Emitter::emit(bool enable)
 {
-	float randomValue = glm::linearRand(minEmittingInterval, maxEmittingInterval);
-	randomValue += pendingToEmit;
-
-	int particlesToCreate = static_cast<int>(randomValue) / 1;
-
-	pendingToEmit = randomValue - particlesToCreate;
-
-
-	for (int i = 0; i < particlesToCreate; ++i)
-	{
-		//Emit particle
-	}
+	emitting = enable;
 }
 
 bool Emitter::isEmitting()
@@ -65,19 +54,47 @@ bool Emitter::isEmitting()
 
 void Emitter::update(float deltaTime)
 {
-	for (auto it = particlesEmitted.rbegin(); it != particlesEmitted.rend(); ++it)
+	// Update existing particles
+	std::vector<Particle>::reverse_iterator it = (particlesEmitted.rbegin());
+	std::vector<Particle>::reverse_iterator send = (particlesEmitted.rend());
+	for (int i = particlesEmitted.size() - 1; i >= 0; --i)
 	{
-		(*it).update(deltaTime);
+		particlesEmitted.at(i).update(deltaTime);
 
-		if ((*it).getRemainingLifetime() <= 0)
+		if (particlesEmitted.at(i).getRemainingLifetime() <= 0)
 		{
-			std::advance(it, 1);
-			particlesEmitted.erase(it.base());
+			particlesEmitted.erase(particlesEmitted.begin() + i);
+		}
+	}
+
+	// Create new particles when needed
+	if (emitting)
+	{
+		float randomValue = glm::linearRand(minEmittingInterval, maxEmittingInterval);
+		randomValue += pendingToEmit;
+
+		int particlesToCreate = static_cast<int>(randomValue) / 1;
+
+		pendingToEmit = randomValue - particlesToCreate;
+
+
+		for (int i = 0; i < particlesToCreate; ++i)
+		{
+			//Emit particle
+			Particle particle = Particle(material,
+				glm::linearRand(minVelocityInterval, maxVelocityInterval),
+				glm::linearRand(minSpinInterval, maxSpinInterval),
+				glm::linearRand(minLifetimeInterval, maxLifetimeInterval), autoFade);
+			particle.setPosition(position);
+			particlesEmitted.push_back(particle);
 		}
 	}
 }
 
 void Emitter::draw()
 {
-
+	for (auto particle = particlesEmitted.begin(); particle != particlesEmitted.end(); ++particle)
+	{
+		(*particle).draw();
+	}
 }
