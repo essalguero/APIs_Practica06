@@ -41,5 +41,5 @@ private:
 
 	std::vector<Particle> particlesEmitted;
 
-	float pendingToEmit;
+	float pendingToEmit = 0.0f;
 };

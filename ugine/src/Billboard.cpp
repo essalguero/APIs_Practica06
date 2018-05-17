@@ -72,12 +72,12 @@ void Billboard::draw()
 	newModelMatrix[3] = glm::vec4(position.x, position.y, position.z, 1.0f);
 	//newModelMatrix = glm::scale(glm::rotate(glm::transpose(newModelMatrix), spin, glm::vec3(0, 0, spin)), scale);
 	newModelMatrix = glm::rotate(newModelMatrix, glm::radians(spin), glm::vec3(0, 0, 1));
-	newModelMatrix = glm::scale(newModelMatrix, glm::vec3(size, 1));
+	newModelMatrix = glm::scale(newModelMatrix, glm::vec3(size * glm::vec2(0.01), 1));
 	State::modelMatrix = newModelMatrix;
 
-	material.setColor(glm::vec4(1.0f));
+	/*material.setColor(glm::vec4(1.0f));
 	material.setBlendMode(Material::BlendMode::ALPHA);
-	material.setDepthWrite(true);
+	material.setDepthWrite(true);*/
 
 	material.prepare();
 	std::shared_ptr<Shader> shader = material.getShader();

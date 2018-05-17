@@ -63,7 +63,7 @@ int init() {
 
 void configureEmitter(std::shared_ptr<Emitter>& emitter, glm::vec4 minColorRange, glm::vec4 maxColorRange,
 	float minLifetimeRange, float maxLifetimeRange, float minRateRange, float maxRateRange,
-	float minScaleRange, float maxScaleRange, glm::vec3 minVelocityRange, glm::vec3 maxVelocityRante,
+	float minScaleRange, float maxScaleRange, glm::vec3 minVelocityRange, glm::vec3 maxVelocityRange,
 	float minSpinRange, float maxSpinRange, bool emitting)
 {
 	emitter->setColorRange(minColorRange, maxColorRange);
@@ -71,7 +71,7 @@ void configureEmitter(std::shared_ptr<Emitter>& emitter, glm::vec4 minColorRange
 	emitter->setRateRange(minRateRange, maxRateRange);
 	emitter->setScaleRange(minScaleRange, maxScaleRange);
 	emitter->setScaleRange(minScaleRange, maxScaleRange);
-	emitter->setVelocityRange(minVelocityRange, maxVelocityRante);
+	emitter->setVelocityRange(minVelocityRange, maxVelocityRange);
 	emitter->setSpinVelocityRange(minSpinRange, maxSpinRange);
 	emitter->emit(emitting);
 }
@@ -102,13 +102,13 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");
 	Material fireMaterial = Material(fireTexture, State::defaultShader);
 	fireMaterial.setDepthWrite(true);
-	fireMaterial.setCulling(true);
+	//fireMaterial.setCulling(true);
 	fireMaterial.setLighting(false);
 	std::shared_ptr<Emitter> fireEmitter = std::make_shared<Emitter>(fireMaterial, true);
-	//fireEmitter.setPosition(glm::vec3(0, 2, 0));
-	fireEmitter->setPosition(glm::vec3(0, 0, 0));
+	fireEmitter->setPosition(glm::vec3(0, 6.3, 0));
+	//fireEmitter->setPosition(glm::vec3(0, 0, 0));
 	configureEmitter(fireEmitter, glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
-		0.3, 0.6, 50.0f, 200.0f, 0.2, 0.5, glm::vec3(0.0f, 0.3f, 0.0f), glm::vec3(0.1f, 10.0f, 0.1f),
+		0.3, 0.6, 1.0f, 2.0f, 0.2, 0.5, glm::vec3(0.0f, 0.01f, 0.0f), glm::vec3(0.0f, 0.1f, 0.0f),
 		0.0f, 3.0f, true);
 	//emittersVector->push_back(fireEmitter);
 	world.addEntity(fireEmitter);
@@ -116,12 +116,13 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	std::shared_ptr<Texture> smokeTexture = Texture::load("data/smoke.png");
 	Material smokeMaterial = Material(smokeTexture, State::defaultShader);
 	std::shared_ptr<Emitter> smokeEmitter = std::make_shared<Emitter>(smokeMaterial, true);
-	//smokeEmitter.setPosition(glm::vec3(0, 2, 0));
-	smokeEmitter->setPosition(glm::vec3(0, 0, 0));
+	smokeEmitter->setPosition(glm::vec3(0, 6.3, 0));
+	//smokeEmitter->setPosition(glm::vec3(0, 0, 0));
 	configureEmitter(smokeEmitter, glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
-		0.3, 0.6, 50.0f, 200.0f, 0.2, 0.5, glm::vec3(0.0f, 0.3f, 0.0f), glm::vec3(0.1f, 10.0f, 0.1f),
+		0.3, 0.6, 1.0f, 2.0f, 0.2, 0.5, glm::vec3(0.0f, 0.01f, 0.0f), glm::vec3(0.0f, 0.1f, 0.0f),
 		0.0f, 3.0f, true);
 	//emittersVector.push_back(smokeEmitter);
+	world.addEntity(smokeEmitter);
 
 	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
 
