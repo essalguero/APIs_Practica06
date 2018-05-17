@@ -97,10 +97,13 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	modelModel->setScale(vec3(0.01f, 0.01f, 0.01f));
 
 
-	world.addEntity(modelModel);
+	//world.addEntity(modelModel);
 
 	std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");
 	Material fireMaterial = Material(fireTexture, State::defaultShader);
+	fireMaterial.setDepthWrite(true);
+	fireMaterial.setCulling(true);
+	fireMaterial.setLighting(false);
 	Emitter fireEmitter = Emitter(fireMaterial, true);
 	//fireEmitter.setPosition(glm::vec3(0, 2, 0));
 	fireEmitter.setPosition(glm::vec3(0, 0, 0));
@@ -117,7 +120,7 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	configureEmitter(smokeEmitter, glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
 		0.3, 0.6, 50.0f, 200.0f, 0.2, 0.5, glm::vec3(0.0f, 0.3f, 0.0f), glm::vec3(0.1f, 10.0f, 0.1f),
 		0.0f, 3.0f, true);
-	emittersVector.push_back(smokeEmitter);
+	//emittersVector.push_back(smokeEmitter);
 
 	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
 
@@ -129,7 +132,7 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 
 	pointLight->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	//world.addEntity(directionalLight);
+	world.addEntity(directionalLight);
 	//world.addEntity(pointLight);
 
 	return 1;
@@ -181,7 +184,7 @@ int main(int, char**) {
 
 	camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(-20, 0, 0))));
 	camera->move(glm::vec3(0.0f, 5.0f, 25.0f));
-	camera->setClearColor(glm::vec3(0.0f, 0.0f, 0.0f));
+	camera->setClearColor(glm::vec3(0.05f, 0.05f, 0.05f));
 	world.addEntity(camera);
 
 	// Generate the objects in the world
@@ -258,11 +261,11 @@ int main(int, char**) {
 		camera->setPosition(glm::vec3(0, 0, 0));
 		//camera->setRotation(camera->getRotation() - glm::vec3(0.0f, 0.0f, -90.0f));
 		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(20, 0, 0))));
-		//camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30 * deltaTime, 0))));
+		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30 * deltaTime, 0))));
 
-		camera->setRotationQuat(glm::slerp(camera->getRotationQuat(),
+		/*camera->setRotationQuat(glm::slerp(camera->getRotationQuat(),
 			camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30, 0))),
-			deltaTime));
+			deltaTime));*/
 
 		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(-20, 0, 0))));
 		//camera->setRotationQuat(glm::slerp(camera->getRotationQuat(), 

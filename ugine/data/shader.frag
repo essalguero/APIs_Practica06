@@ -98,6 +98,7 @@ void main()
 			if (isTexturized)
 			{
 				gl_FragColor = (diffuseComponent * color * texture2D(texSampler, fTexture)) + specularComponent;
+				//gl_FragColor = color;
 			}
 			else
 			{
@@ -118,5 +119,12 @@ void main()
 		}
 	}
 
-	//gl_FragColor = vec4(normalize(N), 1);
+	if (hasColor)
+	{
+		gl_FragColor = color;
+	}
+	else
+	{
+		gl_FragColor = vec4(1.0);
+	}
 }

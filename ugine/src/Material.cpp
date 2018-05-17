@@ -6,6 +6,8 @@ Material::Material(const std::shared_ptr<Texture>& tex,
 {
 	materialTexture = tex;
 	materialShader = shader;
+
+	materialColor = glm::vec4(1.0f);
 }
 
 const std::shared_ptr<Shader>& Material::getShader() const
@@ -84,16 +86,16 @@ void Material::prepare()
 	// Check if there is a texture to be used
 	if (hasColorLoc != -1)
 	{
-		if (!materialTexture)
-		{
+		//if (!materialTexture)
+		//{
 
 			shader->setInt(hasColorLoc, 1);
 			shader->setVec4(colorLoc, materialColor);
-		}
-		else
-		{
-			shader->setInt(hasColorLoc, 0);
-		}
+		//}
+		//else
+		//{
+			//shader->setInt(hasColorLoc, 0);
+		//}
 	}
 
 	/*

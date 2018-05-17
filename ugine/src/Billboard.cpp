@@ -10,7 +10,7 @@ Billboard::Billboard(const Material& mat)
 	spin = 0;
 
 	vector<Vertex> vertexVector;
-	vector<uint16_t> indicesVector = {0, 1, 2, 1, 3, 2};
+	vector<uint16_t> indicesVector = {0, 1, 2, 2, 3, 0};
 
 	Vertex vertex;
 	vertex.normal = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -20,11 +20,11 @@ Billboard::Billboard(const Material& mat)
 	vertex.position = glm::vec3(0.5f, -0.5f, 0.0f);
 	vertex.texture = glm::vec2(size.x, 0);
 	vertexVector.push_back(vertex);
-	vertex.position = glm::vec3(-0.5f, 0.5f, 0.0f);
-	vertex.texture = glm::vec2(0, size.y);
-	vertexVector.push_back(vertex);
 	vertex.position = glm::vec3(0.5f, 0.5f, 0.0f);
 	vertex.texture = glm::vec2(size.x, size.y);
+	vertexVector.push_back(vertex);
+	vertex.position = glm::vec3(-0.5f, 0.5f, 0.0f);
+	vertex.texture = glm::vec2(0, size.y);
 	vertexVector.push_back(vertex);
 
 
@@ -65,12 +65,20 @@ void Billboard::setSpin(float spin)
 
 void Billboard::draw()
 {
-	glm::mat4 newModelMatrix = State::viewMatrix;
-	glm::scale(glm::rotate(newModelMatrix, spin, glm::vec3(0, 0, spin)), scale);
-
+	glm::mat4 newModelMatrix = glm::transpose(State::viewMatrix);
+	newModelMatrix[0][3] = 0;
+	newModelMatrix[1][3] = 0;
+	newModelMatrix[2][3] = 0;
+	newModelMatrix[3] = glm::vec4(position.x, position.y, position.z, 1);
+	//newModelMatrix = glm::scale(glm::rotate(glm::transpose(newModelMatrix), spin, glm::vec3(0, 0, spin)), scale);
+	newModelMatrix = glm::rotate(newModelMatrix, spin, glm::vec3(0, 0, 1));
 	State::modelMatrix = newModelMatrix;
 
-	material.prepare();
+	material.setColor(glm::vec4(1.0f));
+	material.setBlendMode(Material::BlendMode::ALPHA);
+	material.setDepthWrite(true);
 
-	buffer->draw(material.getShader());
+	material.prepare();
+	std::shared_ptr<Shader> shader = material.getShader();
+	buffer->draw(shader);
 }

@@ -110,6 +110,8 @@ Material& Mesh::getMaterial(size_t index)
 
 void Mesh::draw()
 {
+	
+
 	for (int i = 0; i < buffersVector.size(); ++i)
 	{
 		shared_ptr<Shader> shader = materialsVector.at(i).getShader();
@@ -122,7 +124,7 @@ void Mesh::draw()
 
 		// Draw the buffer using the shader
 		buffersVector.at(i)->draw(shader);
-		
+
 	}
 }
 
@@ -160,7 +162,7 @@ std::shared_ptr<Mesh> Mesh::load(
 			}
 
 			// Color
-			glm::vec4 color;
+			glm::vec4 color = glm::vec4(1.0f);
 			std::string colorString = materialNode.child("color").text().as_string();
 			if (colorString != "")
 			{
@@ -259,6 +261,8 @@ std::shared_ptr<Mesh> Mesh::load(
 			Material material = Material::Material(texture, nullptr);
 			material.setShininess(shininess);
 			material.setColor(color);
+			material.setCulling(true);
+			material.setDepthWrite(true);
 
 
 			std::shared_ptr<Buffer> buffer = Buffer::create(vertexVector, indicesVector);
