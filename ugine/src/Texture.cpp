@@ -50,7 +50,8 @@ uint32_t Texture::getId() const
 
 const glm::ivec2& Texture::getSize() const
 {
-	return glm::ivec2(imageWidth, imageHeight);
+	glm::ivec2 size = glm::ivec2(imageWidth, imageHeight);
+	return size;
 }
 
 void Texture::bind() const

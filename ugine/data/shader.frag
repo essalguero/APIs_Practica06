@@ -119,12 +119,12 @@ void main()
 		}
 	}
 
-	if (hasColor)
+	/*if (hasColor)
 	{
-		gl_FragColor = color;
+		gl_FragColor = vec4(N, 1);
 	}
 	else
 	{
 		gl_FragColor = vec4(1.0);
-	}
+	}*/
 }

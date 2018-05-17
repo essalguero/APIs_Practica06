@@ -52,7 +52,7 @@ void Material::prepare()
 	glm::mat4 mvpMatrix = State::projectionMatrix * mvMatrix;
 
 	glm::mat4 normalsMatrix(mvMatrix);
-	glm::transpose(glm::inverse(normalsMatrix));
+	normalsMatrix = glm::transpose(glm::inverse(normalsMatrix));
 
 
 	shader->setMatrix(shader->getLocation("mvMatrix"), mvMatrix);
