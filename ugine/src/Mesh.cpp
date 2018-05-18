@@ -262,6 +262,7 @@ std::shared_ptr<Mesh> Mesh::load(
 			material.setShininess(shininess);
 			material.setColor(color);
 			material.setCulling(true);
+			material.setLighting(true);
 			material.setDepthWrite(true);
 
 

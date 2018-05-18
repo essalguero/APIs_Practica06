@@ -29,7 +29,17 @@ void Particle::update(float deltaTime)
 
 	if (automaticFade)
 	{
-		material.setColor(glm::vec4(material.getColor().x, material.getColor().y, material.getColor().z, 
-			max(remainingLifetime / totalLifetime, 0.0f)));
+
+		float fade;
+		if (remainingLifetime > 0.0f)
+		{
+			fade = remainingLifetime / totalLifetime;
+		}
+		else
+		{
+			fade = 0.0f;
+		}
+
+		material.setColor(glm::vec4(material.getColor().x, material.getColor().y, material.getColor().z, fade));
 	}
 }

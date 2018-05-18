@@ -31,6 +31,7 @@ Billboard::Billboard(const Material& mat)
 	buffer = Buffer::create(vertexVector, indicesVector);
 
 	position = glm::vec3(0.0f, 0.0f, 0.0f);
+
 }
 
 const Material& Billboard::getMaterial() const
@@ -72,8 +73,8 @@ void Billboard::draw()
 	newModelMatrix[3] = glm::vec4(position.x, position.y, position.z, 1.0f);
 	//newModelMatrix = glm::scale(glm::rotate(glm::transpose(newModelMatrix), spin, glm::vec3(0, 0, spin)), scale);
 	newModelMatrix = glm::rotate(newModelMatrix, glm::radians(spin), glm::vec3(0, 0, 1));
-	glm::vec3 billboardScale = glm::vec3(size, 1) * scale;
-	newModelMatrix = glm::scale(newModelMatrix, billboardScale);
+	//glm::vec3 billboardScale = glm::vec3(size, 1) * scale;
+	//newModelMatrix = glm::scale(newModelMatrix, billboardScale);
 	State::modelMatrix = newModelMatrix;
 
 	/*material.setColor(glm::vec4(1.0f));

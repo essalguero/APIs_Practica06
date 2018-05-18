@@ -284,9 +284,9 @@ int main(int, char**) {
 		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(20, 0, 0))));
 		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30 * deltaTime, 0))));
 
-		/*camera->setRotationQuat(glm::slerp(camera->getRotationQuat(),
+		camera->setRotationQuat(glm::slerp(camera->getRotationQuat(),
 			camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30, 0))),
-			deltaTime));*/
+			deltaTime));
 
 		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(-20, 0, 0))));
 		//camera->setRotationQuat(glm::slerp(camera->getRotationQuat(), 
