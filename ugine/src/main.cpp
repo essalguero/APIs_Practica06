@@ -107,9 +107,14 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	std::shared_ptr<Emitter> fireEmitter = std::make_shared<Emitter>(fireMaterial, true);
 	fireEmitter->setPosition(glm::vec3(0, 6.3, 0));
 	//fireEmitter->setPosition(glm::vec3(0, 0, 0));
-	configureEmitter(fireEmitter, glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
-		0.3, 0.6, 1.0f, 2.0f, 0.2, 0.5, glm::vec3(0.0f, 0.01f, 0.0f), glm::vec3(0.0f, 0.1f, 0.0f),
-		0.0f, 3.0f, true);
+
+	configureEmitter(fireEmitter, 
+		glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
+		0.5f, 0.5f, 
+		10.0f, 25.0f, 
+		0.025f, 0.1f, 
+		glm::vec3(-1.0f, 5.0f, -1.0f), glm::vec3(1.0f, 10.0f, 1.0f),
+		0.0f, 0.0f, true);
 	//emittersVector->push_back(fireEmitter);
 	world.addEntity(fireEmitter);
 
@@ -118,9 +123,23 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	std::shared_ptr<Emitter> smokeEmitter = std::make_shared<Emitter>(smokeMaterial, true);
 	smokeEmitter->setPosition(glm::vec3(0, 6.3, 0));
 	//smokeEmitter->setPosition(glm::vec3(0, 0, 0));
-	configureEmitter(smokeEmitter, glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
-		0.3, 0.6, 1.0f, 2.0f, 0.2, 0.5, glm::vec3(0.0f, 0.01f, 0.0f), glm::vec3(0.0f, 0.1f, 0.0f),
-		0.0f, 3.0f, true);
+
+
+	/*(std::shared_ptr<Emitter>& emitter,
+	glm::vec4 minColorRange, glm::vec4 maxColorRange,
+	float minLifetimeRange, float maxLifetimeRange,
+	float minRateRange, float maxRateRange,
+	float minScaleRange, float maxScaleRange,
+	glm::vec3 minVelocityRange, glm::vec3 maxVelocityRange,
+	float minSpinRange, float maxSpinRange, bool emitting)*/
+
+	configureEmitter(smokeEmitter, 
+		glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
+		1.0f, 5.0f, 
+		5.0f, 10.0f,
+		0.05f, 0.1f, 
+		glm::vec3(-0.1f, 1.0f, -0.1f), glm::vec3(0.1f, 4.0f, 0.1f),
+		30.0f, 60.0f, true);
 	//emittersVector.push_back(smokeEmitter);
 	world.addEntity(smokeEmitter);
 

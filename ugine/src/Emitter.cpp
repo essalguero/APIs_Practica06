@@ -27,7 +27,7 @@ void Emitter::setSpinVelocityRange(float min, float max)
 void Emitter::setScaleRange(float min, float max)
 {
 	minScaleInterval = min;
-	maxSpinInterval = max;
+	maxScaleInterval = max;
 }
 
 void Emitter::setLifetimeRange(float min, float max)
@@ -84,6 +84,8 @@ void Emitter::update(float deltaTime)
 				glm::linearRand(minSpinInterval, maxSpinInterval),
 				glm::linearRand(minLifetimeInterval, maxLifetimeInterval), autoFade);
 			particle.setPosition(position);
+			float scale = glm::linearRand(minScaleInterval, maxScaleInterval);
+			particle.setScale(glm::vec3(scale, scale, 1.0f));
 			particlesEmitted.push_back(particle);
 		}
 	}
