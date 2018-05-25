@@ -1,7 +1,7 @@
-/*#ifdef _MSC_VER
+#ifdef _MSC_VER
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #endif
-*/
+
 
 #include <fstream>
 #include <iostream>
@@ -70,7 +70,6 @@ void configureEmitter(std::shared_ptr<Emitter>& emitter, glm::vec4 minColorRange
 	emitter->setLifetimeRange(minLifetimeRange, maxLifetimeRange);
 	emitter->setRateRange(minRateRange, maxRateRange);
 	emitter->setScaleRange(minScaleRange, maxScaleRange);
-	emitter->setScaleRange(minScaleRange, maxScaleRange);
 	emitter->setVelocityRange(minVelocityRange, maxVelocityRange);
 	emitter->setSpinVelocityRange(minSpinRange, maxSpinRange);
 	emitter->emit(emitting);
@@ -86,28 +85,24 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	if (modelMesh == nullptr)
 		return 0;
 
-	/*for (size_t i = 0; i < modelMesh->getNumBuffers(); ++i)
-	{
-		modelMesh->getBuffer(i)->inverseNormals();
-	}*/
-
+	// Create model - Column
 	shared_ptr<Model> modelModel = make_shared<Model>(modelMesh);
-	//modelModel->setRotation(glm::vec3(90.0f, 0.0f, 0.0f));
-	modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	modelModel->setScale(vec3(0.01f, 0.01f, 0.01f));
+	modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-
+	// Add model - Column
 	world.addEntity(modelModel);
 
+	// Create fire emitter
 	std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");
 	Material fireMaterial = Material(fireTexture, State::defaultShader);
-	fireMaterial.setDepthWrite(true);
-	//fireMaterial.setCulling(true);
+	fireMaterial.setCulling(false);
 	fireMaterial.setLighting(false);
+	fireMaterial.setBlendMode(Material::BlendMode::ADD);
 	std::shared_ptr<Emitter> fireEmitter = std::make_shared<Emitter>(fireMaterial, true);
-	fireEmitter->setPosition(glm::vec3(0, 6.3, 0));
-	//fireEmitter->setPosition(glm::vec3(0, 0, 0));
+	fireEmitter->setPosition(glm::vec3(0, 6.5, 0));
 
+	// Set the parameters
 	configureEmitter(fireEmitter, 
 		glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
 		0.5f, 0.5f, 
@@ -115,24 +110,17 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 		0.025f, 0.1f, 
 		glm::vec3(-1.0f, 5.0f, -1.0f), glm::vec3(1.0f, 10.0f, 1.0f),
 		0.0f, 0.0f, true);
-	//emittersVector->push_back(fireEmitter);
-	world.addEntity(fireEmitter);
 
+	// Create the smoke emitter
 	std::shared_ptr<Texture> smokeTexture = Texture::load("data/smoke.png");
 	Material smokeMaterial = Material(smokeTexture, State::defaultShader);
+	smokeMaterial.setCulling(false);
+	smokeMaterial.setLighting(false);
+	smokeMaterial.setBlendMode(Material::BlendMode::ALPHA);
 	std::shared_ptr<Emitter> smokeEmitter = std::make_shared<Emitter>(smokeMaterial, true);
-	smokeEmitter->setPosition(glm::vec3(0, 6.3, 0));
-	//smokeEmitter->setPosition(glm::vec3(0, 0, 0));
-
-
-	/*(std::shared_ptr<Emitter>& emitter,
-	glm::vec4 minColorRange, glm::vec4 maxColorRange,
-	float minLifetimeRange, float maxLifetimeRange,
-	float minRateRange, float maxRateRange,
-	float minScaleRange, float maxScaleRange,
-	glm::vec3 minVelocityRange, glm::vec3 maxVelocityRange,
-	float minSpinRange, float maxSpinRange, bool emitting)*/
-
+	smokeEmitter->setPosition(glm::vec3(0, 7, 0));
+	
+	// Set the parameters
 	configureEmitter(smokeEmitter, 
 		glm::vec4(0.3f, 0.3f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
 		1.0f, 5.0f, 
@@ -140,21 +128,17 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 		0.05f, 0.1f, 
 		glm::vec3(-0.1f, 1.0f, -0.1f), glm::vec3(0.1f, 4.0f, 0.1f),
 		30.0f, 60.0f, true);
-	//emittersVector.push_back(smokeEmitter);
+
+	// Add both particle emitters
 	world.addEntity(smokeEmitter);
+	world.addEntity(fireEmitter);
 
-	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
+	// Set Lighting
+	world.setAmbient(glm::vec3(0.1, 0.1, 0.1));
+	std::shared_ptr<Light>pointLight = std::make_shared<Light>(vec3(1.0f, 1.0f, 1.0f), Light::Type::POINT,
+		glm::vec3(.4f, .4f, .4f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	std::shared_ptr<Light> directionalLight = std::make_shared<Light>(vec3(1.0f, 1.0f, 1.0f), Light::Type::DIRECTIONAL,
-		glm::vec3(.6f, .6f, .6f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(0.0f, 4.472f, 2.236f), Light::Type::POINT,
-		glm::vec3(1.0f, 0.0f, 0.0f), 0.2f, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	pointLight->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-
-	world.addEntity(directionalLight);
-	//world.addEntity(pointLight);
+	world.addEntity(pointLight);
 
 	return 1;
 }
@@ -162,8 +146,10 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 
 int main(int, char**) {
 
-	std::vector<Emitter> emittersVector;
+	//Camera rotation is update in every frame
+	float angle = 0.0f;
 
+	std::vector<Emitter> emittersVector;
 	if (glfwInit() != GLFW_TRUE) {
 		std::cout << "could not initalize glfw" << std::endl;
 		return -1;
@@ -198,14 +184,9 @@ int main(int, char**) {
 
 	// Generate a camera and store it in the world
 	shared_ptr<Camera> camera = make_shared<Camera>();
-	//camera->setRotation(glm::vec3(-30.0f, 0.0f, 0.0f));
-	//camera->setPosition(glm::vec3(0.0f, 0.0f, 20.0f));
 	camera->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	//camera->setRotation(glm::vec3(0.0f, 0.0f, 10.0f));
-
-	camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(-20, 0, 0))));
-	camera->move(glm::vec3(0.0f, 5.0f, 25.0f));
-	camera->setClearColor(glm::vec3(0.05f, 0.05f, 0.05f));
+	camera->setRotation(glm::vec3(0, 0, 0));
+	camera->setClearColor(glm::vec3(0.0f, 0.0f, 0.0f));
 	world.addEntity(camera);
 
 	// Generate the objects in the world
@@ -219,9 +200,6 @@ int main(int, char**) {
 	double yPrev;
 
 	glfwGetCursorPos(window, &xPrev, &yPrev);
-
-	double xCurrent;
-	double yCurrent;
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -278,31 +256,16 @@ int main(int, char**) {
 		// Update viewport in case the screen has been resized
 		camera->setViewport(glm::ivec4(0, 0, screenWidth, screenHeight));
 
-		//Camera should be rotated here
+		//Camera rotation
 		camera->setPosition(glm::vec3(0, 0, 0));
-		//camera->setRotation(camera->getRotation() - glm::vec3(0.0f, 0.0f, -90.0f));
-		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(20, 0, 0))));
-		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30 * deltaTime, 0))));
+		angle += 32 * deltaTime;
+		camera->setRotation(glm::vec3(-20, angle, 0));
+		camera->move(glm::vec3(0, 0, 24));
+		camera->setPosition(glm::vec3(0, 6, 0) + camera->getPosition());
 
-		camera->setRotationQuat(glm::slerp(camera->getRotationQuat(),
-			camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30, 0))),
-			deltaTime));
-
-		camera->setRotationQuat(camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(-20, 0, 0))));
-		//camera->setRotationQuat(glm::slerp(camera->getRotationQuat(), 
-		//	camera->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 60, 0))), deltaTime));
-		//camera->setRotation(camera->getRotation() + glm::vec3(0.0f, 0.0f, -90.0f));
-		camera->move(glm::vec3(0, 5, 25));
-		//camera->setRotation(glm::vec3(-30.0f, 0.0f, 0.0f));
-		
-		/*for (auto emitter = emittersVector.begin(); emitter != emittersVector.end(); ++emitter)
-		{
-			(*emitter).update(deltaTime);
-			(*emitter).draw();
-		}*/
 
 		// Set projection matrix in case the screen has been resized
-		glm::mat4 projectionMatrix = glm::perspective(45.0f, 
+		glm::mat4 projectionMatrix = glm::perspective(45.0f,
 			static_cast<float>(screenWidth) / static_cast<float>(screenHeight), 0.1f, 100.0f);
 		camera->setProjection(projectionMatrix);
 

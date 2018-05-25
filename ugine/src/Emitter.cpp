@@ -1,4 +1,5 @@
 #include "Emitter.h"
+#include "State.h"
 
 Emitter::Emitter(const Material& mat, bool autofade)
 {
@@ -54,8 +55,9 @@ bool Emitter::isEmitting()
 
 void Emitter::update(float deltaTime)
 {
+
 	// Update existing particles
-	for (int i = particlesEmitted.size() - 1; i >= 0; --i)
+	for (int i = static_cast<int>(particlesEmitted.size()) - 1; i >= 0; --i)
 	{
 		particlesEmitted.at(i).update(deltaTime);
 
@@ -68,7 +70,7 @@ void Emitter::update(float deltaTime)
 	// Create new particles when needed
 	if (emitting)
 	{
-		float randomValue = glm::linearRand(minEmittingInterval, maxEmittingInterval);
+		float randomValue = glm::linearRand(minEmittingInterval, maxEmittingInterval) * deltaTime;
 		randomValue += pendingToEmit;
 
 		int particlesToCreate = static_cast<int>(randomValue) / 1;

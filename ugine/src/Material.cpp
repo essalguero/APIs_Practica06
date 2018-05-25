@@ -86,29 +86,14 @@ void Material::prepare()
 	// Check if there is a texture to be used
 	if (hasColorLoc != -1)
 	{
-		//if (!materialTexture)
-		//{
-
-			shader->setInt(hasColorLoc, 1);
-			shader->setVec4(colorLoc, materialColor);
-		//}
-		//else
-		//{
-			//shader->setInt(hasColorLoc, 0);
-		//}
+		shader->setInt(hasColorLoc, 1);
+		shader->setVec4(colorLoc, materialColor);
 	}
 
-	/*
-	uniform int numberLights;
-uniform vec4 diffuse;
-uniform int shininess;
-uniform vec3 ambientLight;
-uniform LightInfo lights[MAX_LIGHTS];
-*/
 	int variableLocation = shader->getLocation("numberLights");
 	if (lighting)
 	{
-		shader->setInt(variableLocation, State::lights.size());
+		shader->setInt(variableLocation, static_cast<int>(State::lights.size()));
 
 		variableLocation = shader->getLocation("shininess");
 		shader->setInt(variableLocation, materialShininess);
@@ -127,27 +112,25 @@ uniform LightInfo lights[MAX_LIGHTS];
 	variableLocation = shader->getLocation("diffuse");
 	shader->setVec4(variableLocation, materialColor);
 
-	/*shader->setInt(shader->getLocation("numberLights"), State::lights.size());
-	shader->setVec4(shader->getLocation("diffuse"), materialColor);
-	shader->setInt(shader->getLocation("shininess"), materialShininess);
-	shader->setVec3(shader->getLocation("ambientLight"), State::ambient);*/
-
-
+	//Set blending mode
 	switch (blendingMode) {
-	case Material::BlendMode::ALPHA:
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		break;
-	case Material::BlendMode::ADD:
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-		break;
-	case Material::BlendMode::MUL:
-		glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-		break;
-	default:
-		break;
+		case Material::BlendMode::ALPHA:
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		case Material::BlendMode::ADD:
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			break;
+		case Material::BlendMode::MUL:
+			glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+			break;
+		default:
+			break;
 	}
 
+	// Set culling mode
 	(culling) ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
+
+	// Set Depth buffer active/non active
 	glDepthMask(depthWrite);
 }
 
@@ -170,8 +153,6 @@ void Material::setShininess(uint8_t shininess)
 {
 	materialShininess = shininess;
 }
-
-
 
 Material::BlendMode	Material::getBlendMode() const
 {

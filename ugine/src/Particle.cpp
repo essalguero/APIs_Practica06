@@ -23,7 +23,7 @@ void Particle::update(float deltaTime)
 {
 	remainingLifetime -= deltaTime;
 
-	move(velocity);
+	move(velocity * deltaTime);
 
 	rotation = rotation + glm::vec3(0, 0, (spin * deltaTime));
 
